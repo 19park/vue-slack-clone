@@ -57,7 +57,7 @@
 
                             <v-img :src="message.image"
                                    :lazy-src="message.image"
-                                   max-width="500"
+                                   max-width="600"
                                    style="flex: 0 1 auto;"
                                    contain>
                                 <template v-slot:placeholder>
