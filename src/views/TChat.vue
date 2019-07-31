@@ -33,7 +33,6 @@
                 <v-list-item>
                     <v-list-item-title class="cyan--text text--lighten-3">
                         <v-btn
-                            tile outlined color="yellow"
                             style="width: 100%;"
                             @click="doAddChannals"
                         >
