@@ -17,6 +17,7 @@
                                 <v-flex xs12>
                                     <input
                                         type="file"
+                                        ref="inpFiles"
                                         class="deep-purple accent-4"
                                         :rules="fileRules"
                                         @change="addFile"
@@ -68,6 +69,7 @@
                 this.file = null;
 
                 this.$nextTick(() => {
+                    this.$refs.inpFiles.value = '';
                     this.$refs.form.reset();
                 });
             },
@@ -95,6 +97,8 @@
                     } else {
                         this.$alert.showAlertToWarning('파일확인', '사진 업로드는 jpg/png/gif 만 가능합니다. '+ mime.lookup(this.file.name));
                     }
+                } else {
+                    this.$alert.showAlertToWarning('파일확인', '파일을 선택해주세요.');
                 }
             },
 

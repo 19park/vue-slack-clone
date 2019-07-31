@@ -149,15 +149,15 @@
                     this.messages.push(message);
 
                     this.$nextTick(() => {
-                        this.moveToScroll();
+                        this.moveToScroll(message?.image);
                     });
                 });
 
                 this.addToListeners(channelId, ref, 'child_added');
             },
 
-            moveToScroll() {
-                if (this.initLoader) {
+            moveToScroll(isFile) {
+                if (isFile) {
                     setTimeout(() => {
                         scrollTo(this.$refs.messageWrap, 500);
 

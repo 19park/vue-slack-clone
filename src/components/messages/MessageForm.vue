@@ -27,7 +27,7 @@
                 <v-btn large
                        dark
                        class="ml-3 fill-height"
-                       :class="{'disabled': uploadState === 'uploading'}"
+                       :disabled="uploadState === 'uploading'"
                        @click="doOpenFile"
                 ><v-icon color="grey lighten-2">add_photo_alternate</v-icon></v-btn>
 
@@ -81,6 +81,7 @@
             sendMessage() {
                 if (this.message.length > 0) {
                     this.$parent.getMessageRef().child(this.currentChannel.id).push().set(this.createMessage()).then(() => {
+                        this.uploadState = null;
                     }).catch(err => {
                         this.$alert.showAlertToWarning(err.message);
                     }).finally(() => {
@@ -166,6 +167,8 @@
 
         beforeDestroy() {
             if (this.uploadTask !== null) {
+                this.uploadState = null;
+
                 this.uploadTask.cancel();
                 this.uploadTask = null;
             }
