@@ -1,3 +1,5 @@
+import "moment/locale/ko";
+
 import '@/plugins/vuetify';
 // import '@/plugins/firebase';
 import '@/plugins/loading';

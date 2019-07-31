@@ -45,14 +45,14 @@
                         <v-list-item-content v-if="!isFile(message)">
                             <v-list-item-title class="d-flex justify-space-between mb-2">
                                 <strong>{{message.user.name}}</strong>
-                                <span class="grey--text">{{message.timestamp | fromNow}}</span>
+                                <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
                             </v-list-item-title>
                             <v-list-item-subtitle v-html="message.content"></v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-content v-else>
                             <v-list-item-title class="d-flex justify-space-between mb-2">
                                 <strong>{{message.user.name}}</strong>
-                                <span class="grey--text">{{message.timestamp | fromNow}}</span>
+                                <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
                             </v-list-item-title>
 
                             <v-img :src="message.image"
@@ -112,11 +112,9 @@
         },
         watch: {
             currentChannel(newData) {
-                this.messages = [];
-                this.detachListeners();
-                this.addListeners();
+                if (this.channel === newData) return;
 
-                this.channel = newData;
+                this.init();
             }
         },
         filters: {
@@ -125,11 +123,19 @@
             }
         },
         methods: {
+            init() {
+                this.messages = [];
+                this.detachListeners();
+                this.addListeners();
+
+                this.channel = this.currentChannel;
+            },
+
             selfMessage(user) {
                 return this.currentUser.uid === user.id
             },
+
             addListeners() {
-                console.log('message addlistener')
                 this.messagesRef.child(this.channelId).on('child_added', snap => {
                     let message = snap.val();
                     message['id'] = snap.key;
@@ -169,7 +175,7 @@
             this.messagesRef = this.$firebase.database().ref('messages');
         },
         mounted() {
-            // this.addListeners();
+            this.addListeners();
         },
         beforeDestroy() {
             this.detachListeners();
@@ -185,5 +191,9 @@
     .message__wrap {
         flex-basis: 0;
         -webkit-overflow-scrolling: touch;
+
+        .message__fromNow {
+            font-size: .9rem;
+        }
     }
 </style>

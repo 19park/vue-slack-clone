@@ -69,9 +69,9 @@
             ...mapGetters(['currentChannel', 'currentUser', 'isPrivate']),
             uploadLabel() {
                 switch (this.uploadState) {
-                    case 'uploading': return '업로드 중..';
-                    case 'error': return '업로드 에러.';
-                    case 'done': return '완료';
+                    case 'uploading': return '업로드 중.. 기다리셈';
+                    case 'error': return '업로드 에러ㅠ';
+                    case 'done': return '완료ㅋ';
                     default: return ''
                 }
             }
