@@ -27,8 +27,9 @@
                 <v-btn large
                        dark
                        class="ml-3 fill-height"
+                       :class="{'disabled': uploadState === 'uploading'}"
                        @click="doOpenFile"
-                ><v-icon color="grey lighten-1">add_photo_alternate</v-icon></v-btn>
+                ><v-icon color="grey lighten-2">add_photo_alternate</v-icon></v-btn>
 
                 <FileModal ref="modalFile"
                            @upload="uploadFile"
@@ -37,7 +38,7 @@
         </v-flex>
 
         <v-slide-y-transition leave-absolute>
-            <v-flex v-if="progress" class="mt-3">
+            <v-flex v-if="uploadState" class="mt-3">
                 <v-progress-linear :value="percent"></v-progress-linear>
                 <p class="pa-3">{{ uploadLabel }}</p>
             </v-flex>
@@ -56,11 +57,8 @@
         data() {
             return {
                 message: '',
-
-                progress: false,
                 percent: 0,
 
-                storageRef: null,
                 uploadTask: null,
                 uploadState: null
             }
@@ -124,9 +122,7 @@
                 let _fileExt = file.name.substring(_lastDot, file.name.length).toLowerCase();
                 let filePath = `${this.getPath()}/${uuidV4()}${_fileExt}`;
 
-                this.progress = true;
-
-                this.uploadTask = this.storageRef.child(filePath).put(file, metadata);
+                this.uploadTask = this.$firebase.storage().ref().child(filePath).put(file, metadata);
                 this.uploadState = "uploading";
 
                 this.uploadTask.on('state_changed', snap => {
@@ -134,13 +130,11 @@
                     this.percent = percent;
                 }, err => {
                     this.$alert.showAlertToWarning(err.message);
-                    this.progress = false;
 
                     this.uploadState = 'error';
                     this.uploadTask = null;
                 }, () => {
                     // finish complete
-                    this.progress = false;
                     this.uploadState = 'done';
 
                     this.uploadTask.snapshot.ref.getDownloadURL().then((fileUrl) => {
@@ -151,6 +145,8 @@
 
             sendFileMessage(fileUrl, ref, pathToUpload) {
                 ref.child(pathToUpload).push().set(this.createMessage(fileUrl)).then(() => {
+                    this.uploadState = null;
+
                     this.$nextTick(() => {
                         this.$parent.moveToScroll();
                     });
@@ -166,10 +162,6 @@
                     return `tchat/public`
                 }
             }
-        },
-
-        created() {
-            this.storageRef = this.$firebase.storage().ref();
         },
 
         beforeDestroy() {

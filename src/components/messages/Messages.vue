@@ -95,12 +95,11 @@
             }
         },
         data: () => ({
-            privateMessagesRef: null,
-            messagesRef: null,
-
             messages: [],
             listeners: [],
-            channel: null
+            channel: null,
+
+            initLoader: null
         }),
         computed: {
             ...mapGetters(['currentChannel', 'currentUser', 'isPrivate'])
@@ -109,9 +108,14 @@
             MessageForm
         },
         watch: {
-            currentChannel(newData) {
-                if (this.channel === newData) return;
-                this.init();
+            currentChannel: {
+                handler: function(value) {
+                    if (this.channel === value) return;
+                    this.$nextTick(() => {
+                        this.init();
+                    });
+                },
+                immediate: true
             }
         },
         filters: {
@@ -123,9 +127,7 @@
             init() {
                 this.messages = [];
                 this.detachListeners();
-
-                const loader = this.$common.getLoader(this);
-                this.addListeners(loader);
+                this.addListeners();
 
                 this.channel = this.currentChannel;
             },
@@ -134,29 +136,39 @@
                 return this.currentUser.uid === user.id;
             },
 
-            addListeners(loader = null) {
+            addListeners() {
                 let ref = this.getMessageRef();
                 let routeParams = this.$route.params;
                 let channelId = this.private ? `${routeParams.userId1}/${routeParams.userId2}` : this.channelId;
+                this.initLoader = this.$common.getLoader(this);
 
                 ref.child(channelId).on('child_added', snap => {
                     let message = snap.val();
                     message['id'] = snap.key;
 
                     this.messages.push(message);
+
                     this.$nextTick(() => {
-                        this.$common.debounce(() => {this.moveToScroll(loader)}, 1000);
+                        this.moveToScroll();
                     });
                 });
 
                 this.addToListeners(channelId, ref, 'child_added');
             },
 
-            moveToScroll(loader = null) {
-                setTimeout(() => {
+            moveToScroll() {
+                if (this.initLoader) {
+                    setTimeout(() => {
+                        scrollTo(this.$refs.messageWrap, 500);
+
+                        if (this.initLoader) {
+                            this.initLoader.hide();
+                            this.initLoader = null;
+                        }
+                    }, 1500);
+                } else {
                     scrollTo(this.$refs.messageWrap, 500);
-                    if (loader) loader.hide();
-                }, 1500);
+                }
             },
 
             addToListeners(id, ref, event) {
@@ -180,9 +192,9 @@
 
             getMessageRef() {
                 if (this.isPrivate) {
-                    return this.privateMessagesRef;
+                    return this.$firebase.database().ref('privateMessages');
                 } else {
-                    return this.messagesRef;
+                    return this.$firebase.database().ref('messages');
                 }
             },
 
@@ -190,13 +202,7 @@
                 return !message.content && message.image;
             }
         },
-        created() {
-            this.privateMessagesRef = this.$firebase.database().ref('privateMessages');
-            this.messagesRef = this.$firebase.database().ref('messages');
-        },
-        mounted() {
-            this.addListeners();
-        },
+
         beforeDestroy() {
             this.detachListeners();
         }
