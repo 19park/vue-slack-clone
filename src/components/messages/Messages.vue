@@ -58,6 +58,7 @@
                             <v-img :src="message.image"
                                    :lazy-src="message.image"
                                    max-width="500"
+                                   style="flex: 0 1 auto;"
                                    contain>
                                 <template v-slot:placeholder>
                                     <v-layout
@@ -128,6 +129,7 @@
                 return this.currentUser.uid === user.id
             },
             addListeners() {
+                console.log('message addlistener')
                 this.messagesRef.child(this.channelId).on('child_added', snap => {
                     let message = snap.val();
                     message['id'] = snap.key;

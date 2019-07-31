@@ -36,10 +36,13 @@
             </v-flex>
         </v-flex>
 
-        <v-flex v-if="progress" class="mt-3">
-            <v-progress-linear :value="percent"></v-progress-linear>
-            <p class="pa-3">{{ uploadLabel }}</p>
-        </v-flex>
+        <v-slide-y-transition>
+            <v-flex v-if="progress" class="mt-3">
+                <v-progress-linear :value="percent"></v-progress-linear>
+                <p class="pa-3">{{ uploadLabel }}</p>
+            </v-flex>
+        </v-slide-y-transition>
+
     </v-layout>
 </template>
 
