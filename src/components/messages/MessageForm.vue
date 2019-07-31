@@ -36,7 +36,7 @@
             </v-flex>
         </v-flex>
 
-        <v-slide-y-transition>
+        <v-slide-y-transition leave-absolute>
             <v-flex v-if="progress" class="mt-3">
                 <v-progress-linear :value="percent"></v-progress-linear>
                 <p class="pa-3">{{ uploadLabel }}</p>
@@ -134,6 +134,8 @@
                     this.percent = percent;
                 }, err => {
                     this.$alert.showAlertToWarning(err.message);
+                    this.progress = false;
+
                     this.uploadState = 'error';
                     this.uploadTask = null;
                 }, () => {
@@ -150,7 +152,7 @@
             sendFileMessage(fileUrl, ref, pathToUpload) {
                 ref.child(pathToUpload).push().set(this.createMessage(fileUrl)).then(() => {
                     this.$nextTick(() => {
-
+                        this.$parent.moveToScroll();
                     });
                 }).catch(err => {
                     this.$alert.showAlertToWarning(err.message);

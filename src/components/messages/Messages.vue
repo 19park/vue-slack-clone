@@ -141,7 +141,6 @@
                 });
             },
 
-
             moveToScroll() {
                 setTimeout(() => {
                     scrollTo(this.$refs.messageWrap, 500);
