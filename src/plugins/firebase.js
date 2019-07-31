@@ -1,11 +1,5 @@
 import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import store from './store';
 import firebase from 'firebase';
-
-import vuetify from './plugins/vuetify';
-import './plugins';
 
 const firebaseConfig = {
     apiKey: "AIzaSyB4PRIxuchbrRPGITh9HonN_A0D7yhwwYM",
@@ -19,17 +13,3 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 Vue.prototype.$firebase = firebase;
-Vue.config.productionTip = false;
-
-const unsuscribe = firebase.auth().onAuthStateChanged(user => {
-    store.dispatch('setUser', user);
-
-    new Vue({
-        router,
-        store,
-        vuetify,
-        render: h => h(App)
-    }).$mount('#app');
-
-    unsuscribe();
-});

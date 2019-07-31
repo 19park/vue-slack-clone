@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,600');
+
+$body-font-family : 'Noto Sans KR', Arial, Helvetica, sans-serif;
+
+// src/sass/main.scss
+@import '~vuetify/src/styles/styles.sass';
+
+
+// The variables you want to modify
+$font-size-root: 11px;
+$btn-border-radius: 0px;
