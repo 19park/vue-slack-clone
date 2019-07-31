@@ -33,7 +33,7 @@
                 <v-list-item>
                     <v-list-item-title class="cyan--text text--lighten-3">
                         <v-btn
-                            style="width: 100%;"
+                            block
                             @click="doAddChannals"
                         >
                             <v-icon left>add</v-icon> 채널 생성하기
@@ -61,7 +61,8 @@
                     class="mt-4 pl-4 grey--text"
                     style="font-size: 1rem;"
                 >사용자</v-subheader>
-                <Users/>
+
+                <Users ref="userContainer"/>
 
             </v-list>
         </v-navigation-drawer>
@@ -154,7 +155,9 @@
             },
 
             changeChannel(channel) {
+                this.$store.dispatch('setPrivate', false);
                 this.$store.dispatch('setChannel', channel);
+
                 this.$router.push(`/channel/${channel.id}`);
             },
             setChannelActive(channelId) {

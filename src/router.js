@@ -49,6 +49,19 @@ const router = new Router({
           props: true
         }
       ]
+    },
+    {
+      path: '/private',
+      name: 'private',
+      component: TChat,
+      beforeEnter: authChecker,
+      children: [
+        {
+          path: ':userId1/:userId2',
+          component: Messages,
+          props: { private: true }
+        }
+      ]
     }
   ]
 });

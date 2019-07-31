@@ -21,6 +21,9 @@ export default new Vuex.Store({
         },
         SET_CHANNEL(state, channel) {
             state.currentChannel = channel;
+        },
+        SET_PRIVATE(state, isPrivate) {
+            state.isPrivate = isPrivate;
         }
     },
     actions: {
@@ -29,6 +32,9 @@ export default new Vuex.Store({
         },
         setChannel({commit}, channel) {
             commit('SET_CHANNEL', channel);
+        },
+        setPrivate({commit}, isPrivate) {
+            commit('SET_PRIVATE', isPrivate);
         }
     }
 });

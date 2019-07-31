@@ -96,12 +96,18 @@
             channelId: {
                 type: String,
                 default: null
+            },
+            private: {
+                type: Boolean,
+                default: false
             }
         },
         data: () => ({
+            privateMessagesRef: null,
             messagesRef: null,
 
             messages: [],
+            listeners: [],
             channel: null
         }),
         computed: {
@@ -118,8 +124,8 @@
             }
         },
         filters: {
-            fromNow (value) {
-                return moment(value).fromNow()
+            fromNow(value) {
+                return moment(value).fromNow();
             }
         },
         methods: {
@@ -132,11 +138,15 @@
             },
 
             selfMessage(user) {
-                return this.currentUser.uid === user.id
+                return this.currentUser.uid === user.id;
             },
 
             addListeners() {
-                this.messagesRef.child(this.channelId).on('child_added', snap => {
+                let ref = this.getMessageRef();
+                let routeParams = this.$route.params;
+                let channelId = this.private ? `${routeParams.userId1}/${routeParams.userId2}` : this.channelId;
+
+                ref.child(channelId).on('child_added', snap => {
                     let message = snap.val();
                     message['id'] = snap.key;
 
@@ -145,6 +155,8 @@
                         this.moveToScroll();
                     });
                 });
+
+                this.addToListeners(channelId, ref, 'child_added');
             },
 
             moveToScroll() {
@@ -153,10 +165,23 @@
                 }, 1000);
             },
 
-            detachListeners() {
-                if (this.channel !== null) {
-                    this.messagesRef.child(this.channel.id).off('child_added');
+            addToListeners(id, ref, event) {
+                let idx = this.listeners.findIndex(el => {
+                    return el.id === id && el.ref === ref && el.event === event;
+                });
+
+                if (idx === -1) {
+                    this.listeners.push({id, ref, event});
                 }
+            },
+
+            detachListeners() {
+                this.listeners.forEach(listener => {
+                    listener.ref.child(listener.id).off(listener.event);
+                });
+
+                this.listeners = [];
+                this.messages = [];
             },
 
             getMessageRef() {
@@ -172,6 +197,7 @@
             }
         },
         created() {
+            this.privateMessagesRef = this.$firebase.database().ref('privateMessages');
             this.messagesRef = this.$firebase.database().ref('messages');
         },
         mounted() {

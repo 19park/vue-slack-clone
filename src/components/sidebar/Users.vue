@@ -9,6 +9,8 @@
             <v-list-item
                 v-for="user in users"
                 :key="user.uid"
+                :class="{'grey darken-2': isActive(user.uid)}"
+                @click.prevent="changeChannel(user)"
             >
                 <v-list-item-avatar>
                     <img
@@ -43,7 +45,7 @@
             };
         },
         computed: {
-            ...mapGetters(['currentUser'])
+            ...mapGetters(['currentUser', 'currentChannel'])
         },
         methods: {
             addListeners() {
@@ -54,6 +56,17 @@
                         user['status'] = 'offline';
 
                         this.users.push(user);
+                    }
+
+                    if (!this.currentChannel && this.$route.params?.userId1 && this.$route.params?.userId2) {
+                        const {userId1, userId2} = this.$route.params;
+                        if (userId1 === snap.key) {
+                            this.$store.dispatch('setPrivate', true);
+                            this.$store.dispatch('setChannel', {
+                                id: `${userId1}/${userId2}`,
+                                name: snap.val().name
+                            });
+                        }
                     }
                 });
 
@@ -90,6 +103,25 @@
 
             isOnline(user) {
                 return user.status == 'online';
+            },
+
+            changeChannel(user) {
+                let channelId = this.getChannelId(user.uid);
+                let channel = {id: channelId, name: user.name};
+
+                this.$store.dispatch('setPrivate', true);
+                this.$store.dispatch('setChannel', channel);
+
+                this.$router.push(`/private/${channelId}`);
+            },
+
+            isActive(userId) {
+                let channelId = this.getChannelId(userId);
+                return this.currentChannel?.id === channelId;
+            },
+
+            getChannelId(userId) {
+                return userId < this.currentUser.uid ? `${userId}/${this.currentUser.uid}` : `${this.currentUser.uid}/${userId}`
             },
 
             detachListeners() {
