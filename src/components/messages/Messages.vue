@@ -86,6 +86,7 @@
     import moment from 'moment';
     import {mapGetters} from 'vuex';
 
+    import scrollTo from '@/plugins/scrollToBottom';
     import MessageForm from '@/components/messages/MessageForm';
 
     export default {
@@ -132,7 +133,6 @@
                     message['id'] = snap.key;
 
                     this.messages.push(message);
-
                     this.$nextTick(() => {
                         this.moveToScroll();
                     });
@@ -141,7 +141,9 @@
 
 
             moveToScroll() {
-                this.$refs.messageWrap.scrollTop = this.$refs.messageWrap.scrollHeight;
+                setTimeout(() => {
+                    scrollTo(this.$refs.messageWrap, 500);
+                }, 1000);
             },
 
             detachListeners() {
