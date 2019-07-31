@@ -7,15 +7,7 @@
         <v-flex ref="messageWrap"
                 class="message__wrap overflow-y-auto"
         >
-            <v-list v-if="!messages.length">
-                <v-list-item>
-                    <v-list-item-content>
-                        <v-list-item-title>NO MESSAGE</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list>
             <v-slide-y-transition
-                v-else
                 three-line
                 class="py-0"
                 group
@@ -119,7 +111,6 @@
         watch: {
             currentChannel(newData) {
                 if (this.channel === newData) return;
-
                 this.init();
             }
         },
@@ -132,7 +123,9 @@
             init() {
                 this.messages = [];
                 this.detachListeners();
-                this.addListeners();
+
+                const loader = this.$common.getLoader(this);
+                this.addListeners(loader);
 
                 this.channel = this.currentChannel;
             },
@@ -141,7 +134,7 @@
                 return this.currentUser.uid === user.id;
             },
 
-            addListeners() {
+            addListeners(loader = null) {
                 let ref = this.getMessageRef();
                 let routeParams = this.$route.params;
                 let channelId = this.private ? `${routeParams.userId1}/${routeParams.userId2}` : this.channelId;
@@ -152,16 +145,17 @@
 
                     this.messages.push(message);
                     this.$nextTick(() => {
-                        this.moveToScroll();
+                        this.$common.debounce(() => {this.moveToScroll(loader)}, 1000);
                     });
                 });
 
                 this.addToListeners(channelId, ref, 'child_added');
             },
 
-            moveToScroll() {
+            moveToScroll(loader = null) {
                 setTimeout(() => {
                     scrollTo(this.$refs.messageWrap, 500);
+                    if (loader) loader.hide();
                 }, 1500);
             },
 

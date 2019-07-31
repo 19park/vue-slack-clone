@@ -130,11 +130,17 @@
         components: {Users, ModalChannels},
         methods: {
             doLogout() {
+                const loader = this.$common.getLoader(this);
                 this.presenceRef.child(this.currentUser.uid).remove();
 
-                this.$firebase.auth().signOut();
-                this.$store.dispatch('setUser', null);
-                this.$router.push('/login');
+                this.$firebase.auth().signOut().then(() => {
+                    this.$store.dispatch('setUser', null);
+                    this.$router.push('/login');
+                }).catch(err => {
+                    this.$alert.showAlertToWarning(err.message);
+                }).finally(() => {
+                    loader.hide();
+                });
             },
 
             doAddChannals() {

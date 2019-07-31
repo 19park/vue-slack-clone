@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import _get from 'lodash/get';
+import {RotateSquare2} from 'vue-loading-spinner';
 
 let timer;
 const common = {};
@@ -22,9 +23,10 @@ common.install = function (Vue) {
         getLoader(self) {
             return self.$loading.show({
                 container: self.$el,
-                canCancel: false
+                canCancel: false,
+                backgroundColor: '#111',
             }, {
-                // default: self.$createElement()
+                default: self.$createElement(RotateSquare2)
             });
         },
 
