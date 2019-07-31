@@ -15,15 +15,12 @@
                         <v-container grid-list-md>
                             <v-layout wrap>
                                 <v-flex xs12>
-                                    <v-file-input
-                                        ref="inpFile"
-                                        color="deep-purple accent-4"
-                                        label="사진선택"
+                                    <input
+                                        type="file"
+                                        class="deep-purple accent-4"
                                         :rules="fileRules"
                                         @change="addFile"
-                                        clearable
                                     >
-                                    </v-file-input>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -84,7 +81,8 @@
                 }
             },
 
-            addFile(file) {
+            addFile(e) {
+                const file = e.target.files[0];
                 this.file = file;
             },
 
@@ -95,7 +93,7 @@
                         this.$emit('upload', this.file, metadata);
                         this.doClose();
                     } else {
-                        this.$alert.showAlertToWarning('파일확인', '사진 업로드는 jpg/png/gif 만 가능합니다.');
+                        this.$alert.showAlertToWarning('파일확인', '사진 업로드는 jpg/png/gif 만 가능합니다. '+ mime.lookup(this.file.name));
                     }
                 }
             },

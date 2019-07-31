@@ -162,7 +162,7 @@
             moveToScroll() {
                 setTimeout(() => {
                     scrollTo(this.$refs.messageWrap, 500);
-                }, 1000);
+                }, 1500);
             },
 
             addToListeners(id, ref, event) {
