@@ -1,29 +1,19 @@
-# tuto-slack
+<h1 align="center">vue-slack-clone 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version- 0.1.0-blue.svg?cacheSeconds=2592000" />
+</p>
 
-## Project setup
-```
-yarn install
-```
+> vue+vuetify+firebase
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+## Install
 
-### Compiles and minifies for production
-```
-yarn run build
+```sh
+npm install
 ```
 
-### Run your tests
-```
-yarn run test
-```
+## Show your support
 
-### Lints and fixes files
-```
-yarn run lint
-```
+Give a ⭐️ if this project helped you!
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
