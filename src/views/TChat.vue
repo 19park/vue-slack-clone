@@ -107,11 +107,9 @@
         </v-app-bar>
 
         <v-content class="fill-height">
-            <v-container fluid fill-height>
-                <v-fade-transition>
-                    <router-view></router-view>
-                </v-fade-transition>
-            </v-container>
+            <v-fade-transition>
+                <router-view></router-view>
+            </v-fade-transition>
         </v-content>
 
         <ModalChannels ref="modalChannels"

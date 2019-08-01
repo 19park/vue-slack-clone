@@ -1,78 +1,80 @@
 <template>
-    <v-layout
-        justify-center
-        column
-        nowrap
-    >
-        <v-flex ref="messageWrap"
-                class="message__wrap overflow-y-auto"
+    <v-container fluid fill-height>
+        <v-layout
+            justify-center
+            column
+            nowrap
         >
-            <v-slide-y-transition
-                three-line
-                class="py-0"
-                group
-                tag="div"
+            <v-flex ref="messageWrap"
+                    class="message__wrap overflow-y-auto"
             >
-                <template v-for="(message, index) in messages">
-                    <v-subheader
-                        v-if="message.header"
-                        :key="message.header"
-                        v-text="message.header"
-                    ></v-subheader>
+                <v-slide-y-transition
+                    three-line
+                    class="py-0"
+                    group
+                    tag="div"
+                >
+                    <template v-for="(message, index) in messages">
+                        <v-subheader
+                            v-if="message.header"
+                            :key="message.header"
+                            v-text="message.header"
+                        ></v-subheader>
 
-                    <v-divider
-                        v-if="index > 0"
-                        :key="index"
-                        :inset="message.inset"
-                    ></v-divider>
+                        <v-divider
+                            v-if="index > 0"
+                            :key="index"
+                            :inset="message.inset"
+                        ></v-divider>
 
-                    <v-list-item
-                        :key="message.id"
-                        :class="{'comment__self': selfMessage(message.user)}"
-                    >
-                        <v-list-item-avatar class="align-self-start">
-                            <v-img :src="message.user.avatar"></v-img>
-                        </v-list-item-avatar>
+                        <v-list-item
+                            :key="message.id"
+                            :class="{'comment__self': selfMessage(message.user)}"
+                        >
+                            <v-list-item-avatar class="align-self-start">
+                                <v-img :src="message.user.avatar"></v-img>
+                            </v-list-item-avatar>
 
-                        <v-list-item-content v-if="!isFile(message)">
-                            <v-list-item-title class="d-flex justify-space-between mb-2">
-                                <strong>{{message.user.name}}</strong>
-                                <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
-                            </v-list-item-title>
-                            <v-list-item-subtitle v-html="message.content"></v-list-item-subtitle>
-                        </v-list-item-content>
-                        <v-list-item-content v-else>
-                            <v-list-item-title class="d-flex justify-space-between mb-2">
-                                <strong>{{message.user.name}}</strong>
-                                <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
-                            </v-list-item-title>
+                            <v-list-item-content v-if="!isFile(message)">
+                                <v-list-item-title class="d-flex justify-space-between mb-2">
+                                    <strong>{{message.user.name}}</strong>
+                                    <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
+                                </v-list-item-title>
+                                <v-list-item-subtitle v-html="message.content"></v-list-item-subtitle>
+                            </v-list-item-content>
+                            <v-list-item-content v-else>
+                                <v-list-item-title class="d-flex justify-space-between mb-2">
+                                    <strong>{{message.user.name}}</strong>
+                                    <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
+                                </v-list-item-title>
 
-                            <v-img :src="message.image"
-                                   :lazy-src="message.image"
-                                   max-width="600"
-                                   style="flex: 0 1 auto;"
-                                   contain>
-                                <template v-slot:placeholder>
-                                    <v-layout
-                                        fill-height
-                                        align-center
-                                        justify-center
-                                        ma-0
-                                    >
-                                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                                    </v-layout>
-                                </template>
-                            </v-img>
-                        </v-list-item-content>
-                    </v-list-item>
-                </template>
-            </v-slide-y-transition>
-        </v-flex>
+                                <v-img :src="message.image"
+                                       :lazy-src="message.image"
+                                       max-width="600"
+                                       style="flex: 0 1 auto;"
+                                       contain>
+                                    <template v-slot:placeholder>
+                                        <v-layout
+                                            fill-height
+                                            align-center
+                                            justify-center
+                                            ma-0
+                                        >
+                                            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                        </v-layout>
+                                    </template>
+                                </v-img>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </template>
+                </v-slide-y-transition>
+            </v-flex>
 
-        <v-flex style="flex-grow: 0;">
-            <MessageForm/>
-        </v-flex>
-    </v-layout>
+            <v-flex style="flex-grow: 0;">
+                <MessageForm/>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>

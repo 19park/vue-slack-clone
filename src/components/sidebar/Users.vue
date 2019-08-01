@@ -96,7 +96,7 @@
 
                         let channelId = this.getChannelId(snap.key);
                         this.privateMessagesRef.child(channelId).on('value', snap => {
-                            this.handleNotifications(channelId, this.currentChannel.id, this.notifCount, snap);
+                            this.handleNotifications(channelId, this.currentChannel?.id, this.notifCount, snap);
                         })
                     }
                 });
