@@ -80,6 +80,8 @@
                 </v-layout>
             </v-container>
         </v-content>
+
+        <iframe name="hiddenframe" src="about:blank;" frameborder="0" width="0" height="0" style="display:none;"></iframe>
     </v-app>
 </template>
 
@@ -126,9 +128,9 @@
 
             doDownWinInstaller() {
                 let link = document.createElement('a');
-                link.href = 'https://firebasestorage.googleapis.com/v0/b/slack-d472b.appspot.com/o/park-chat-electron%20Setup%201.0.0.exe?alt=media&token=68e7d2be-f840-48b7-95ec-1407d89ce3c9';
+                link.href = 'https://firebasestorage.googleapis.com/v0/b/slack-d472b.appspot.com/o/%ED%8C%A4%EC%B1%97%EC%95%B1%20Setup%201.0.0.exe?alt=media&token=2a93308b-379c-4bb2-83ee-b5c49469001c';
 
-                link.target = '_blank';
+                link.target = 'hiddenframe';
                 document.body.append(link);
                 link.click();
                 document.body.removeChild(link);
