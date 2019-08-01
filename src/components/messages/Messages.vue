@@ -159,7 +159,7 @@
             moveToScroll(isFile) {
                 if (isFile) {
                     setTimeout(() => {
-                        scrollTo(this.$refs.messageWrap, 500);
+                        scrollTo(this.$refs.messageWrap, 0);
 
                         if (this.initLoader) {
                             this.initLoader.hide();
@@ -167,7 +167,7 @@
                         }
                     }, 1500);
                 } else {
-                    scrollTo(this.$refs.messageWrap, 500);
+                    scrollTo(this.$refs.messageWrap, 0);
                 }
             },
 

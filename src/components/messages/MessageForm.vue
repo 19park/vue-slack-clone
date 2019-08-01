@@ -87,6 +87,8 @@
                     }).finally(() => {
                         this.message = '';
                     });
+                } else {
+                    this.$alert.showAlertToWarning('알림', '메시지를 입력해주세요.');
                 }
             },
 

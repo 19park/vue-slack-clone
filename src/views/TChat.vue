@@ -36,7 +36,8 @@
                             block
                             @click="doAddChannals"
                         >
-                            <v-icon left>add</v-icon> 채널 생성하기
+                            <v-icon left>add</v-icon>
+                            채널 생성하기
                         </v-btn>
                     </v-list-item-title>
                 </v-list-item>
@@ -51,9 +52,18 @@
                         <v-icon :color="isChannelActive(channel) ? 'orange darken-1':''">lens</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
-                        <v-list-item-title :class="{'orange--text text--darken-1': isChannelActive(channel)}">
+                        <v-list-item-title
+                            class="d-flex justify-space-between align-center"
+                            :class="{'orange--text text--darken-1': isChannelActive(channel)}"
+                        >
                             <div>{{ channel.name }}</div>
-                            <div v-if="getNotification(channel) > 0 && channel.id !== currentChannel.id">{{getNotification(channel)}}</div>
+                            <div v-if="getNotification(channel) > 0 && channel.id !== currentChannel.id">
+                                <v-chip :ripple="false"
+                                        color="red"
+                                >
+                                    {{ getNotification(channel) }}
+                                </v-chip>
+                            </div>
                         </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
@@ -61,7 +71,8 @@
                 <v-subheader
                     class="mt-4 pl-4 grey--text"
                     style="font-size: 1rem;"
-                >사용자</v-subheader>
+                >사용자
+                </v-subheader>
 
                 <Users ref="userContainer"/>
 
@@ -111,6 +122,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
+    import mixins from '@/components/mixins';
 
     import Users from '@/components/sidebar/Users';
     import ModalChannels from '@/components/sidebar/Channels';
@@ -125,8 +137,9 @@
 
                 notifCount: [],
                 channel: null
-            }
+            };
         },
+        mixins: [mixins],
         computed: {
             ...mapGetters(['currentUser', 'currentChannel', 'isPrivate'])
         },
@@ -177,32 +190,8 @@
 
             addCountListener(channelId) {
                 this.$firebase.database().ref('messages').child(channelId).on('value', snap => {
-                   this.handleNotifications(channelId, this.currentChannel?.id, this.notifCount, snap);
+                    this.handleNotifications(channelId, this.currentChannel?.id, this.notifCount, snap);
                 });
-            },
-
-            handleNotifications(channelId, currentChannelId, notifCount, snap) {
-                let lastTotal = 0;
-                let idx = notifCount.findIndex(el => el.id === channelId);
-
-                if (idx !== -1) {
-                    if (channelId !== currentChannelId) {
-                        lastTotal = notifCount[idx].total;
-
-                        if (snap.numChildren() - lastTotal > 0) {
-                            notifCount[idx].notif = snap.numChildren() - lastTotal;
-                        }
-                    }
-
-                    notifCount[idx].lastKnownTotal = snap.numChildren();
-                } else {
-                    notifCount.push({
-                        id: channelId,
-                        total: snap.numChildren(),
-                        lastKnownTotal: snap.numChildren(),
-                        notif: 0
-                    })
-                }
             },
 
             getNotification(channel) {
@@ -236,19 +225,19 @@
 
             setChannelActive(channelId) {
                 this.channels.forEach(channel => {
-                   if (channel.id === channelId) this.changeChannel(channel);
+                    if (channel.id === channelId) this.changeChannel(channel);
                 });
             },
 
             isChannelActive(channel) {
-                return channel.id === this.currentChannel?.id
+                return channel.id === this.currentChannel?.id;
             },
 
             detachListeners() {
                 this.channelsRef.off();
                 this.channels.forEach(el => {
                     this.$firebase.database().ref('messages').child(el.id).off();
-                })
+                });
             }
         },
         created() {
