@@ -97,9 +97,11 @@
         data: () => ({
             messages: [],
             listeners: [],
-            channel: null,
 
-            initLoader: null
+            channel: null,
+            initConfig: {
+                load: false
+            }
         }),
         computed: {
             ...mapGetters(['currentChannel', 'currentUser', 'isPrivate'])
@@ -111,6 +113,8 @@
             currentChannel: {
                 handler: function(value) {
                     if (this.channel === value) return;
+
+                    this.initConfig.load = false;
                     this.$nextTick(() => {
                         this.init();
                     });
@@ -140,18 +144,34 @@
                 let ref = this.getMessageRef();
                 let routeParams = this.$route.params;
                 let channelId = this.private ? `${routeParams.userId1}/${routeParams.userId2}` : this.channelId;
-                this.initLoader = this.$common.getLoader(this);
+                const loader = this.$common.getLoader(this);
 
+                let addCnt = 0;
                 ref.child(channelId).on('child_added', snap => {
+                    addCnt++;
+
                     let message = snap.val();
                     message['id'] = snap.key;
 
                     this.messages.push(message);
-
                     this.$nextTick(() => {
-                        this.moveToScroll(message?.image);
+                        if (!this.initConfig.load) {
+                            this.$common.debounce(() => {
+                                this.moveToScroll(message?.image);
+                                this.initConfig.load = true;
+                                loader.hide();
+                            }, 1500);
+                        } else {
+                            this.moveToScroll(message?.image);
+                        }
                     });
                 });
+
+                setTimeout(() => {
+                    if (addCnt === 0) {
+                        loader.hide();
+                    }
+                }, 1000);
 
                 this.addToListeners(channelId, ref, 'child_added');
             },
@@ -160,11 +180,6 @@
                 if (isFile) {
                     setTimeout(() => {
                         scrollTo(this.$refs.messageWrap, 0);
-
-                        if (this.initLoader) {
-                            this.initLoader.hide();
-                            this.initLoader = null;
-                        }
                     }, 1500);
                 } else {
                     scrollTo(this.$refs.messageWrap, 0);

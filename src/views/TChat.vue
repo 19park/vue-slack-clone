@@ -88,7 +88,7 @@
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-icon class="mx-4">fab fa-youtube</v-icon>
             <v-toolbar-title class="mr-12 align-center">
-                <span class="title">Holy Shiiiiiit</span>
+                <span class="title">No talk Can Win</span>
             </v-toolbar-title>
             <!--<v-spacer></v-spacer>-->
             <!--<v-layout-->
