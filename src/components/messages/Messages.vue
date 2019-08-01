@@ -100,7 +100,8 @@
 
             channel: null,
             initConfig: {
-                load: false
+                load: false,
+                addCnt: 0
             }
         }),
         computed: {
@@ -141,14 +142,15 @@
             },
 
             addListeners() {
+                if (this.initConfig.load) return;
+
                 let ref = this.getMessageRef();
                 let routeParams = this.$route.params;
                 let channelId = this.private ? `${routeParams.userId1}/${routeParams.userId2}` : this.channelId;
                 const loader = this.$common.getLoader(this);
 
-                let addCnt = 0;
                 ref.child(channelId).on('child_added', snap => {
-                    addCnt++;
+                    this.initConfig.addCnt++;
 
                     let message = snap.val();
                     message['id'] = snap.key;
@@ -168,7 +170,7 @@
                 });
 
                 setTimeout(() => {
-                    if (addCnt === 0) {
+                    if (this.initConfig.addCnt === 0) {
                         loader.hide();
                     }
                 }, 1000);
@@ -203,6 +205,8 @@
 
                 this.listeners = [];
                 this.messages = [];
+                this.initConfig.load = false;
+                this.initConfig.addCnt = 0;
             },
 
             getMessageRef() {

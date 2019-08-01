@@ -1,7 +1,6 @@
 module.exports = {
   presets: [
-    '@vue/app',
-    "@babel/preset-env"
+    '@vue/app'
   ],
   plugins: [
     "@babel/plugin-proposal-optional-chaining",

@@ -19,7 +19,7 @@
                             v-model="valid"
                             lazy-validation
                         >
-                            <v-card class="elevation-12">
+                            <v-card class="elevation-12 mb-3">
                                 <v-toolbar
                                     color="primary"
                                     dark
@@ -34,7 +34,6 @@
                                         name="email"
                                         prepend-icon="person"
                                         type="email"
-                                        :counter="50"
                                         :rules="emailRules"
                                         v-model.trim="email"
                                         required
@@ -45,7 +44,6 @@
                                         name="password"
                                         prepend-icon="lock"
                                         type="password"
-                                        :counter="20"
                                         :rules="passwordRules"
                                         v-model="password"
                                         @keyup.enter="validate"
@@ -57,9 +55,26 @@
                                     <v-btn color="primary" @click="validate">로그인</v-btn>
                                 </v-card-actions>
                             </v-card>
-                            <router-link class="d-block text-center mt-5" to="/register">
+
+                            <v-btn
+                                block
+                                color="light-blue darken-4"
+                                class="mt-5 white--text"
+                                to="/register"
+                            >
                                 계정이 없니?
-                            </router-link>
+                            </v-btn>
+                            <v-btn
+                                block
+                                color="blue-grey"
+                                class="mt-3 white--text"
+                                @click="doDownWinInstaller"
+                            >
+                                <v-icon class="mr-2"
+                                        dark
+                                >cloud_download</v-icon>
+                                Download For Windows
+                            </v-btn>
                         </v-form>
                     </v-flex>
                 </v-layout>
@@ -107,6 +122,16 @@
                     this.$alert.showAlertToWarning("로그인 에러", msg);
                     loader.hide();
                 });
+            },
+
+            doDownWinInstaller() {
+                let link = document.createElement('a');
+                link.href = 'https://firebasestorage.googleapis.com/v0/b/slack-d472b.appspot.com/o/park-chat-electron%20Setup%201.0.0.exe?alt=media&token=68e7d2be-f840-48b7-95ec-1407d89ce3c9';
+
+                link.target = '_blank';
+                document.body.append(link);
+                link.click();
+                document.body.removeChild(link);
             }
         },
         created() {
