@@ -165,7 +165,7 @@
 
             doDownWinInstaller() {
                 let link = document.createElement('a');
-                link.href = 'https://firebasestorage.googleapis.com/v0/b/slack-d472b.appspot.com/o/%ED%8C%A4%EC%B1%97%EC%95%B1%20Setup%201.0.0.exe?alt=media&token=2a93308b-379c-4bb2-83ee-b5c49469001c';
+                link.href = 'https://firebasestorage.googleapis.com/v0/b/slack-d472b.appspot.com/o/%ED%95%98%EB%8B%88%EC%B1%97%20Setup%201.0.0.exe?alt=media&token=b961f180-0a9b-43f1-912a-6fe42cde7d9a';
 
                 link.target = 'hiddenframe';
                 document.body.append(link);
