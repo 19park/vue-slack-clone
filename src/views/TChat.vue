@@ -156,7 +156,7 @@
 
                 this.$firebase.auth().signOut().then(() => {
                     this.$store.dispatch('setUser', null);
-                    this.$router.push('/login');
+                    this.$router.replace('/login');
                 }).catch(err => {
                     this.$alert.showAlertToWarning(err.message);
                 }).finally(() => {

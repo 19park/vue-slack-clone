@@ -76,7 +76,7 @@
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn
-                                        to="/"
+                                        to="/login"
                                     >
                                         취소
                                     </v-btn>
@@ -143,9 +143,9 @@
                             await this.saveUserToUsersRef(user).then(() => {
                                 this.$store.dispatch('setUser', user);
                                 this.$snack['success']({
-                                    text: '가입 완료되었습니다. 로그인 해주세요.',
+                                    text: '가입 완료되었습니다. 로그인 해주세요.'
                                 });
-                                this.$router.push('/login');
+                                this.$router.replace('/login');
                             });
                         }).catch(err => {
                             this.$alert.showAlertToWarning(err.message);

@@ -41,12 +41,13 @@ const router = new Router({
         },
         {
             path: '/',
-            name: 'Home',
+            name: 'root',
             component: TChat,
             beforeEnter: authChecker,
             children: [
                 {
                     path: '',
+                    name: 'home',
                     component: Home
                 }
             ]

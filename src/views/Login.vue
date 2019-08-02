@@ -56,14 +56,6 @@
                                 </v-card-actions>
                             </v-card>
 
-                            <v-btn
-                                block
-                                class="mt-5 white--text"
-                                @click="doLoginGoogle"
-                            >
-                                Google 계정으로 로그인
-                            </v-btn>
-
                             <v-spacer></v-spacer>
                             <v-spacer></v-spacer>
 
@@ -75,6 +67,17 @@
                             >
                                 계정이 없니?
                             </v-btn>
+
+                            <v-btn
+                                light
+                                block
+                                class="mt-3"
+                                @click="doRegisterGoogle"
+                            >
+                                <img src="/google.png" width="20" height="20" class="mr-3"/>
+                                Google 계정으로 로그인
+                            </v-btn>
+
                             <v-btn
                                 block
                                 color="blue-grey"
@@ -123,9 +126,7 @@
             passwordRules: [
                 v => !!v || '비밀번호는 필수 항목입니다.',
                 v => (v && v.length >= 6) || '비밀번호는 6자이상 입력해주세요.',
-            ],
-
-            usersRef: null
+            ]
         }),
         methods: {
             validate() {
@@ -138,11 +139,7 @@
                 this.$firebase.auth()
                     .signInWithEmailAndPassword(this.email, this.password)
                     .then(({user}) => {
-                        this.$store.dispatch('setUser', user);
-                        this.$snack['success']({
-                            text: `${user.displayName}님 안녕하세요.`
-                        });
-                        this.$router.replace('/');
+                        this.doLoginComplete(user);
                     }).catch(err => {
                     const msg = err.code === "auth/user-not-found" ? "등록되지 않은 사용자입니다." : err.message;
                     this.$alert.showAlertToWarning("로그인 에러", msg);
@@ -150,7 +147,15 @@
                 });
             },
 
-            doLoginGoogle() {
+            doLoginComplete(user) {
+                this.$store.dispatch('setUser', user);
+                this.$snack['success']({
+                    text: `${user.displayName}님 안녕하세요.`
+                });
+                this.$router.replace('/');
+            },
+
+            doRegisterGoogle() {
                 let provider = new firebase.auth.GoogleAuthProvider();
                 // provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
                 // this.$firebase.auth().signInWithPopup(provider)
@@ -166,23 +171,34 @@
                 document.body.append(link);
                 link.click();
                 document.body.removeChild(link);
+            },
+
+            saveUserToUsersRef(user) {
+                return this.$firebase.database().ref('users').child(user.uid).set({
+                    name: user.displayName,
+                    avatar: user.photoURL
+                });
             }
         },
-        created() {
-            this.usersRef = this.$firebase.database().ref('users');
-
-            this.$firebase.auth().getRedirectResult().then(({user}) => {
-                if (user) {
-                    this.$store.dispatch('setUser', user);
-                    this.$snack['success']({
-                        text: `${user.displayName}님 안녕하세요.`
-                    });
-                    this.$router.replace('/');
-                }
-            }).catch(err => {
-                const msg = err.code === "auth/user-not-found" ? "등록되지 않은 사용자입니다." : err.message;
-                this.$alert.showAlertToWarning("로그인 에러", msg);
-            });
+        beforeRouteEnter (to, from, next) {
+            from.name === 'home' ? next() : next(vm => {
+                vm.$firebase.auth().getRedirectResult().then(async ({user}) => {
+                    if (user && user.uid) {
+                        vm.$firebase.database().ref('users').child(user.uid).on('value', snap => {
+                            if (snap.val()) {
+                                vm.doLoginComplete(user);
+                            } else {
+                                vm.saveUserToUsersRef(user).then(() => {
+                                    vm.doLoginComplete(user);
+                                });
+                            }
+                        });
+                    }
+                }).catch(err => {
+                    const msg = err.code === "auth/user-not-found" ? "등록되지 않은 사용자입니다." : err.message;
+                    vm.$alert.showAlertToWarning("로그인 에러[1]", msg);
+                });
+            })
         }
     };
 </script>
