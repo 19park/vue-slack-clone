@@ -94,7 +94,8 @@
         </v-content>
 
         <div class="d-flex justify-space-between align-center pa-2">
-            <v-btn outlined color="grey" to="/privacy">개인정보 처리방침</v-btn>
+            <!--<v-btn outlined color="grey" to="/privacy">개인정보 처리방침</v-btn>-->
+            <span></span>
             <span>{{version}}</span>
         </div>
 
