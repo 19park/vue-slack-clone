@@ -24,6 +24,14 @@ firebase.initializeApp(firebaseConfig);
 Vue.prototype.$firebase = firebase;
 Vue.config.productionTip = false;
 
+import VueNativeNotification from 'vue-native-notification';
+
+Vue.use(VueNativeNotification, {
+    // Automatic permission request before
+    // showing notification (default: true)
+    requestOnNotify: true
+});
+
 const unsuscribe = firebase.auth().onAuthStateChanged(user => {
     store.dispatch('setUser', user);
 

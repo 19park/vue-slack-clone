@@ -44,16 +44,20 @@
 
     export default {
         name: "Users",
-        data() {
+        data(vm) {
             return {
                 users: [],
-                usersRef: null,
-                connectedRef: null,
-                presenceRef: null,
-                privateMessagesRef: null,
+                usersRef: vm.$firebase.database().ref('users'),
+                connectedRef: vm.$firebase.database().ref('.info/connected'),
+                presenceRef: vm.$firebase.database().ref('presence'),
+                privateMessagesRef: vm.$firebase.database().ref('privateMessages'),
 
                 notifCount: [],
-                channel: null
+                channel: null,
+
+                initConfig: {
+                    load: false
+                }
             };
         },
         mixins: [mixins],
@@ -94,10 +98,25 @@
                     if (this.currentUser.uid !== snap.key) {
                         this.addStatusToUser(snap.key);
 
+                        if (this.initConfig.load) {
+                            const getUser = this.users.find(user => user.uid === snap.key);
+                            this.$notification.show('접속 알림', {
+                                body: `${getUser.name}님이 접속했습니다.`
+                            }, {});
+                        }
+
                         let channelId = this.getChannelId(snap.key);
                         this.privateMessagesRef.child(channelId).on('value', snap => {
                             this.handleNotifications(channelId, this.currentChannel?.id, this.notifCount, snap);
-                        })
+
+                            if (!this.initConfig.load) {
+                                this.$nextTick(() => {
+                                    this.$common.debounce(() => {
+                                        this.initConfig.load = true;
+                                    }, 1000);
+                                });
+                            }
+                        });
                     }
                 });
 
@@ -119,6 +138,7 @@
                        });
                    }
                 });
+
             },
 
             addStatusToUser(userId, connected = true) {
@@ -190,12 +210,6 @@
                 this.connectedRef.off();
                 this.privateMessagesRef.off();
             }
-        },
-        created() {
-            this.usersRef = this.$firebase.database().ref('users');
-            this.connectedRef = this.$firebase.database().ref('.info/connected');
-            this.presenceRef = this.$firebase.database().ref('presence');
-            this.privateMessagesRef = this.$firebase.database().ref('privateMessages');
         },
         mounted() {
             this.addListeners();
