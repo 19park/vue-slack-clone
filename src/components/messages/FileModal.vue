@@ -91,11 +91,11 @@
             sendFile() {
                 if (this.file !== null) {
                     if (this.isValid(this.file.name)) {
-                        let metadata = { contentType: mime.lookup(this.file.name) };
+                        let metadata = {contentType: mime.lookup(this.file.name)};
                         this.$emit('upload', this.file, metadata);
                         this.doClose();
                     } else {
-                        this.$alert.showAlertToWarning('파일확인', '사진 업로드는 jpg/png/gif 만 가능합니다. '+ mime.lookup(this.file.name));
+                        this.$alert.showAlertToWarning('파일확인', '사진 업로드는 jpg/png/gif 만 가능합니다. ' + mime.lookup(this.file.name));
                     }
                 } else {
                     this.$alert.showAlertToWarning('파일확인', '파일을 선택해주세요.');

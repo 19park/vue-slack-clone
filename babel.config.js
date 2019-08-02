@@ -1,14 +1,14 @@
 module.exports = {
-  presets: [
-    [
-      '@vue/app',
-      {
-        "useBuiltIns": "entry"
-      }
+    presets: [
+        [
+            '@vue/app',
+            {
+                "useBuiltIns": "entry"
+            }
+        ]
+    ],
+    plugins: [
+        "@babel/plugin-proposal-optional-chaining",
+        "@babel/plugin-transform-runtime"
     ]
-  ],
-  plugins: [
-    "@babel/plugin-proposal-optional-chaining",
-    "@babel/plugin-transform-runtime"
-  ]
-}
+};

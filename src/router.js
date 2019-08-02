@@ -6,6 +6,7 @@ import Register from './views/Register.vue';
 import TChat from './views/TChat.vue';
 
 import Home from './views/Home.vue';
+import Privacy from './views/Privacy.vue';
 import Messages from '@/components/messages/Messages';
 
 import firebase from 'firebase';
@@ -27,6 +28,11 @@ const router = new Router({
             path: '/login',
             name: 'login',
             component: Login
+        },
+        {
+            path: '/privacy',
+            name: 'privacy',
+            component: Privacy
         },
         {
             path: '/register',

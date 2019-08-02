@@ -60,7 +60,8 @@
                                             justify-center
                                             ma-0
                                         >
-                                            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                            <v-progress-circular indeterminate
+                                                                 color="grey lighten-5"></v-progress-circular>
                                         </v-layout>
                                     </template>
                                 </v-img>
@@ -113,7 +114,7 @@
         },
         watch: {
             currentChannel: {
-                handler: function(value) {
+                handler: function (value) {
                     if (this.channel === value) return;
 
                     this.initConfig.load = false;

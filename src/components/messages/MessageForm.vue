@@ -22,14 +22,17 @@
                        color="primary"
                        class="ml-3 mb-3 fill-height"
                        @click="sendMessage"
-                >전송</v-btn>
+                >전송
+                </v-btn>
 
                 <v-btn large
                        dark
                        class="ml-3 fill-height"
                        :disabled="uploadState === 'uploading'"
                        @click="doOpenFile"
-                ><v-icon color="grey lighten-2">add_photo_alternate</v-icon></v-btn>
+                >
+                    <v-icon color="grey lighten-2">add_photo_alternate</v-icon>
+                </v-btn>
 
                 <FileModal ref="modalFile"
                            @upload="uploadFile"
@@ -48,7 +51,7 @@
 </template>
 
 <script>
-    import FileModal from '@/components/messages/FileModal'
+    import FileModal from '@/components/messages/FileModal';
     import {mapGetters} from 'vuex';
     import uuidV4 from 'uuid/v4';
 
@@ -61,16 +64,20 @@
 
                 uploadTask: null,
                 uploadState: null
-            }
+            };
         },
         computed: {
             ...mapGetters(['currentChannel', 'currentUser', 'isPrivate']),
             uploadLabel() {
                 switch (this.uploadState) {
-                    case 'uploading': return '업로드 중.. 기다리셈';
-                    case 'error': return '업로드 에러ㅠ';
-                    case 'done': return '완료ㅋ';
-                    default: return ''
+                    case 'uploading':
+                        return '업로드 중.. 기다리셈';
+                    case 'error':
+                        return '업로드 에러ㅠ';
+                    case 'done':
+                        return '완료ㅋ';
+                    default:
+                        return '';
                 }
             }
         },
@@ -100,7 +107,7 @@
                         avatar: this.currentUser.photoURL,
                         id: this.currentUser.uid
                     }
-                }
+                };
 
                 if (fileUrl == null) {
                     message['content'] = this.message;
@@ -160,9 +167,9 @@
 
             getPath() {
                 if (this.isPrivate) {
-                    return `tchat/private/${this.currentChannel.id}`
+                    return `tchat/private/${this.currentChannel.id}`;
                 } else {
-                    return `tchat/public`
+                    return `tchat/public`;
                 }
             }
         },

@@ -58,8 +58,19 @@
 
                             <v-btn
                                 block
-                                color="light-blue darken-4"
                                 class="mt-5 white--text"
+                                @click="doLoginGoogle"
+                            >
+                                Google 계정으로 로그인
+                            </v-btn>
+
+                            <v-spacer></v-spacer>
+                            <v-spacer></v-spacer>
+
+                            <v-btn
+                                block
+                                color="light-blue darken-4"
+                                class="mt-3 white--text"
                                 to="/register"
                             >
                                 계정이 없니?
@@ -72,7 +83,8 @@
                             >
                                 <v-icon class="mr-2"
                                         dark
-                                >cloud_download</v-icon>
+                                >cloud_download
+                                </v-icon>
                                 Download For Windows
                             </v-btn>
                         </v-form>
@@ -81,14 +93,25 @@
             </v-container>
         </v-content>
 
-        <iframe name="hiddenframe" src="about:blank;" frameborder="0" width="0" height="0" style="display:none;"></iframe>
+        <div class="d-flex justify-space-between align-center pa-2">
+            <v-btn outlined color="grey" to="/privacy">개인정보 처리방침</v-btn>
+            <span>{{version}}</span>
+        </div>
+
+        <iframe name="hiddenframe" src="about:blank;" frameborder="0" width="0" height="0"
+                style="display:none;"></iframe>
     </v-app>
 </template>
 
 <script>
+    import firebase from 'firebase/app';
+    import {version} from '@/../package.json';
+
     export default {
         name: 'login',
         data: () => ({
+            version: `v${version}`,
+
             valid: true,
             email: '',
             emailRules: [
@@ -104,7 +127,7 @@
             usersRef: null
         }),
         methods: {
-            validate () {
+            validate() {
                 if (this.$refs.form.validate()) {
                     this.doLogin();
                 }
@@ -120,7 +143,26 @@
                         });
                         this.$router.replace('/');
                     }).catch(err => {
-                        const msg = err.code === "auth/user-not-found" ? "등록되지 않은 사용자입니다." : err.message;
+                    const msg = err.code === "auth/user-not-found" ? "등록되지 않은 사용자입니다." : err.message;
+                    this.$alert.showAlertToWarning("로그인 에러", msg);
+                    loader.hide();
+                });
+            },
+
+            doLoginGoogle() {
+                const loader = this.$common.getLoader(this);
+                let provider = new firebase.auth.GoogleAuthProvider();
+                provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+
+                this.$firebase.auth().signInWithPopup(provider)
+                    .then(({user}) => {
+                        this.$store.dispatch('setUser', user);
+                        this.$snack['success']({
+                            text: `${user.displayName}님 안녕하세요.`
+                        });
+                        this.$router.replace('/');
+                    }).catch(err => {
+                    const msg = err.code === "auth/user-not-found" ? "등록되지 않은 사용자입니다." : err.message;
                     this.$alert.showAlertToWarning("로그인 에러", msg);
                     loader.hide();
                 });

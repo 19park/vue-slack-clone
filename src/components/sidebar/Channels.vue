@@ -73,7 +73,7 @@
                 this.dialog = false;
             },
 
-            validate () {
+            validate() {
                 if (this.$refs.form.validate()) {
                     this.addChannels();
                 }
@@ -81,7 +81,7 @@
 
             addChannels() {
                 let key = this.channelsRef.push().key;
-                let newChannel = { id: key, name: this.new_channel };
+                let newChannel = {id: key, name: this.new_channel};
 
                 this.channelsRef.child(key).update(newChannel).then(() => {
                     this.$alert.showCommonAlert(
@@ -92,10 +92,10 @@
 
                             this.$emit('change', key);
                         }
-                    )
+                    );
                 }).catch((err) => {
                     this.$alert.showAlertToWarning(err.message);
-                })
+                });
             }
         }
     };

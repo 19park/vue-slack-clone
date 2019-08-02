@@ -122,7 +122,7 @@
             usersRef: null
         }),
         methods: {
-            validate () {
+            validate() {
                 if (this.$refs.form.validate()) {
                     if (this.password !== this.password_confirm) {
                         this.$alert.showAlertToWarning('비밀번호 확인', '확인 비밀번호가 다릅니다');

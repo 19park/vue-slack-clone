@@ -40,7 +40,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
-    import mixins from '@/components/mixins'
+    import mixins from '@/components/mixins';
 
     export default {
         name: "Users",
@@ -127,20 +127,20 @@
                 });
 
                 this.connectedRef.on('value', snap => {
-                   if (snap.val() === true) {
-                       let ref = this.presenceRef.child(this.currentUser.uid);
+                    if (snap.val() === true) {
+                        let ref = this.presenceRef.child(this.currentUser.uid);
 
-                       ref.set(true);
-                       ref.onDisconnect().remove(err => {
-                          if (err) this.$alert.showAlertToWarning(err);
-                       });
-                   }
+                        ref.set(true);
+                        ref.onDisconnect().remove(err => {
+                            if (err) this.$alert.showAlertToWarning(err);
+                        });
+                    }
                 });
 
             },
 
             addStatusToUser(userId, connected = true) {
-                let idx = this.users.findIndex( user => user.uid === userId);
+                let idx = this.users.findIndex(user => user.uid === userId);
                 if (idx !== -1) {
                     connected === true ? this.users[idx].status = 'online' : this.users[idx].status = 'offline';
                 }
@@ -173,7 +173,7 @@
             },
 
             getChannelId(userId) {
-                return userId < this.currentUser.uid ? `${userId}/${this.currentUser.uid}` : `${this.currentUser.uid}/${userId}`
+                return userId < this.currentUser.uid ? `${userId}/${this.currentUser.uid}` : `${this.currentUser.uid}/${userId}`;
             },
 
             getNotification(user) {

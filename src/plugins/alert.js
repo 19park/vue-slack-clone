@@ -2,19 +2,19 @@ import Vue from 'vue';
 import Swal from 'sweetalert2';
 
 const alert = {
-    install (Vue) {
+    install(Vue) {
         /**
          * 전역 공통 함수
          */
         const alertMethods = {
-            toHtml (text) {
+            toHtml(text) {
                 return (text && text.length > 0) ? text.replace('\n', '<br>') : '';
             },
             /**
              * 일반적인 오류 alert
              * @param title 타이틀
              */
-            showCommonAlert (title, positiveCallback) {
+            showCommonAlert(title, positiveCallback) {
                 this.showAlertToQuestion('warning', '알림', title, '확인', positiveCallback);
             },
 
@@ -22,7 +22,7 @@ const alert = {
              * 메시지 받아서 처리 하는 alert
              * @param positiveCallback 저장 이벤트 핸들러(함수)
              */
-            showAlertToSaveWithMessage (message, positiveCallback) {
+            showAlertToSaveWithMessage(message, positiveCallback) {
                 this.showAlertToQuestion('warning', // 질의
                     "경고",
                     message,                // 확인 메시지
@@ -35,7 +35,7 @@ const alert = {
              * 저장 확인 alert
              * @param positiveCallback 저장 이벤트 핸들러(함수)
              */
-            showAlertToSave (positiveCallback) {
+            showAlertToSave(positiveCallback) {
                 this.showAlertToQuestion('question', // 질의
                     '저장하시겠습니까?', // 저장 확인 메시지
                     null,
@@ -47,7 +47,7 @@ const alert = {
              * 수정 확인 alert
              * @param positiveCallback 수정 이밴트 핸들러(함수)
              */
-            showAlertToUpdate (positiveCallback) {
+            showAlertToUpdate(positiveCallback) {
                 this.showAlertToQuestion('question', // 질의
                     '수정하시겠습니까?', // 수정 확인 메시지
                     null,
@@ -59,7 +59,7 @@ const alert = {
              * 삭제 확인 alert
              * @param positiveCallback 삭제 이벤트 핸들러(함수)
              */
-            showAlertToDelete (positiveCallback) {
+            showAlertToDelete(positiveCallback) {
                 this.showAlertToQuestion('error', // 질의
                     '삭제하시겠습니까?', // 삭제 확인 메시지
                     null,
@@ -74,7 +74,7 @@ const alert = {
              * @param positiveCallback 긍정 이벤트 핸들러(함수)
              * @param negativeCallback 부정 이벤트 핸들러(함수)
              */
-            showAlertToRetry (title, message, positiveCallback, negativeCallback) {
+            showAlertToRetry(title, message, positiveCallback, negativeCallback) {
                 this.showAlertToQuestion('error',
                     title,
                     message,
@@ -93,7 +93,7 @@ const alert = {
              * @param negativeTxt 부정 버튼 텍스트
              * @param negativeCallback 부정 버튼 이벤트 핸들러(함수)
              */
-            showAlertToQuestion (type, title, message, positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
+            showAlertToQuestion(type, title, message, positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
                 Swal.fire({
                     type: type,
                     title: title,
@@ -119,7 +119,7 @@ const alert = {
              * 알림용 alert
              * @param message 내용
              * */
-            showAlertToInfo (message) {
+            showAlertToInfo(message) {
                 Swal.fire({
                     type: 'warning',
                     title: 'Information!',
@@ -128,7 +128,7 @@ const alert = {
                     confirmButtonText: '확인'
                 });
             },
-            showAlertToWarning (title, message) {
+            showAlertToWarning(title, message) {
                 Swal.fire({
                     type: 'warning',
                     title: title,
@@ -143,7 +143,7 @@ const alert = {
              * @param message 내용
              * @param positiveCallback 나가기용 콜백
              */
-            showAlertToExit (title, message, positiveCallback) {
+            showAlertToExit(title, message, positiveCallback) {
                 Swal.fire({
                     type: 'info',
                     title: title,
@@ -174,7 +174,7 @@ const alert = {
              * @param negativeTxt 부정 버튼 텍스트 // 생략가능
              * @param negativeCallback 부정 이벤트 핸들러(함수) // 생략가능
              */
-            showModalSuccessToSave (positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
+            showModalSuccessToSave(positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
                 this.showModalSuccess('저장되었습니다.', positiveTxt, positiveCallback, negativeTxt, negativeCallback);
             },
             /**
@@ -184,7 +184,7 @@ const alert = {
              * @param negativeTxt 부정 버튼 텍스트 // 생략가능
              * @param negativeCallback 부정 이벤트 핸들러(함수) // 생략가능
              */
-            showModalSuccessToUpdate (positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
+            showModalSuccessToUpdate(positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
                 this.showModalSuccess('수정되었습니다.', positiveTxt, positiveCallback, negativeTxt, negativeCallback);
             },
             /**
@@ -194,7 +194,7 @@ const alert = {
              * @param negativeTxt 부정 버튼 텍스트 // 생략가능
              * @param negativeCallback 부정 이벤트 핸들러(함수) // 생략가능
              */
-            showModalSuccessToDelete (positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
+            showModalSuccessToDelete(positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
                 this.showModalSuccess('삭제되었습니다.', positiveTxt, positiveCallback, negativeTxt, negativeCallback);
             },
             /**
@@ -205,7 +205,7 @@ const alert = {
              * @param negativeTxt 부정 버튼 텍스트 // 생략가능
              * @param negativeCallback 부정 이벤트 핸들러(함수) // 생략가능
              */
-            showModalSuccess (title, positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
+            showModalSuccess(title, positiveTxt, positiveCallback, negativeTxt, negativeCallback) {
                 Swal.fire({
                     type: 'success',
                     title: title,
