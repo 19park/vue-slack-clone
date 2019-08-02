@@ -98,11 +98,9 @@
                     if (this.currentUser.uid !== snap.key) {
                         this.addStatusToUser(snap.key);
 
+                        console.log(`initLoad: ${this.initConfig.load}`);
                         if (this.initConfig.load) {
-                            const getUser = this.users.find(user => user.uid === snap.key);
-                            this.$notification.show('접속 알림', {
-                                body: `${getUser.name}님이 접속했습니다.`
-                            }, {});
+                            this.doNotifiActive(snap.key);
                         }
 
                         let channelId = this.getChannelId(snap.key);
@@ -202,6 +200,14 @@
                     this.notifCount[idx].total = this.notifCount[idx].lastKnownTotal;
                     this.notifCount[idx].notif = 0;
                 }
+            },
+
+
+            doNotifiActive(userId) {
+                const getUser = this.users.find(user => user.uid === userId);
+                this.$notification.show('접속 알림', {
+                    body: `${getUser.name}님이 접속했습니다.`
+                }, {});
             },
 
             detachListeners() {
