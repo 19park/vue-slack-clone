@@ -150,22 +150,11 @@
             },
 
             doLoginGoogle() {
-                const loader = this.$common.getLoader(this);
                 let provider = new firebase.auth.GoogleAuthProvider();
-                provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+                // provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+                // this.$firebase.auth().signInWithPopup(provider)
 
-                this.$firebase.auth().signInWithPopup(provider)
-                    .then(({user}) => {
-                        this.$store.dispatch('setUser', user);
-                        this.$snack['success']({
-                            text: `${user.displayName}님 안녕하세요.`
-                        });
-                        this.$router.replace('/');
-                    }).catch(err => {
-                    const msg = err.code === "auth/user-not-found" ? "등록되지 않은 사용자입니다." : err.message;
-                    this.$alert.showAlertToWarning("로그인 에러", msg);
-                    loader.hide();
-                });
+                this.$firebase.auth().signInWithRedirect(provider);
             },
 
             doDownWinInstaller() {
@@ -180,6 +169,19 @@
         },
         created() {
             this.usersRef = this.$firebase.database().ref('users');
+
+            this.$firebase.auth().getRedirectResult().then(({user}) => {
+                if (user) {
+                    this.$store.dispatch('setUser', user);
+                    this.$snack['success']({
+                        text: `${user.displayName}님 안녕하세요.`
+                    });
+                    this.$router.replace('/');
+                }
+            }).catch(err => {
+                const msg = err.code === "auth/user-not-found" ? "등록되지 않은 사용자입니다." : err.message;
+                this.$alert.showAlertToWarning("로그인 에러", msg);
+            });
         }
     };
 </script>
