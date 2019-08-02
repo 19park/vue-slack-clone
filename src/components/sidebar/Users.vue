@@ -98,7 +98,6 @@
                     if (this.currentUser.uid !== snap.key) {
                         this.addStatusToUser(snap.key);
 
-                        console.log(`initLoad: ${this.initConfig.load}`);
                         if (this.initConfig.load) {
                             this.doNotifiActive(snap.key);
                         }
@@ -205,9 +204,12 @@
 
             doNotifiActive(userId) {
                 const getUser = this.users.find(user => user.uid === userId);
-                this.$notification.show('접속 알림', {
-                    body: `${getUser.name}님이 접속했습니다.`
-                }, {});
+                this.$notify({
+                    group: 'active',
+                    type: 'success',
+                    title: '접속 알림',
+                    text: `${getUser.name}님이 접속했습니다.`
+                });
             },
 
             detachListeners() {
