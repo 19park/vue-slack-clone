@@ -88,7 +88,7 @@
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-icon class="mx-4">fab fa-youtube</v-icon>
             <v-toolbar-title class="mr-12 align-center">
-                <span class="title">그냥 채팅 App</span>
+                <span class="title" @click="$router.replace('/');">Play Chat</span>
             </v-toolbar-title>
             <!--<v-spacer></v-spacer>-->
             <!--<v-layout-->

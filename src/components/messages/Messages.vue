@@ -102,8 +102,7 @@
 
             channel: null,
             initConfig: {
-                load: false,
-                addCnt: 0
+                load: false
             }
         }),
         computed: {
@@ -152,41 +151,33 @@
                 const loader = this.$common.getLoader(this);
 
                 ref.child(channelId).on('child_added', snap => {
-                    this.initConfig.addCnt++;
-
                     let message = snap.val();
                     message['id'] = snap.key;
 
                     this.messages.push(message);
                     this.$nextTick(() => {
                         if (!this.initConfig.load) {
-                            this.$common.debounce(() => {
-                                this.moveToScroll(message?.image);
-                                this.initConfig.load = true;
-                                loader.hide();
-                            }, 1500);
-                        } else {
-                            this.moveToScroll(message?.image);
+                            this.initConfig.load = true;
                         }
+                        this.moveToScroll(message?.image);
                     });
                 });
 
                 setTimeout(() => {
-                    if (this.initConfig.addCnt === 0) {
-                        loader.hide();
-                    }
+                    loader.hide();
                 }, 1000);
 
                 this.addToListeners(channelId, ref, 'child_added');
             },
 
             moveToScroll(isFile) {
+                scrollTo(this.$refs.messageWrap, 0);
                 if (isFile) {
-                    setTimeout(() => {
-                        scrollTo(this.$refs.messageWrap, 0);
-                    }, 1500);
-                } else {
-                    scrollTo(this.$refs.messageWrap, 0);
+                    this.$common.debounce(() => {
+                        setTimeout(() => {
+                            scrollTo(this.$refs.messageWrap, 0);
+                        }, 1000);
+                    }, 100);
                 }
             },
 
@@ -208,7 +199,6 @@
                 this.listeners = [];
                 this.messages = [];
                 this.initConfig.load = false;
-                this.initConfig.addCnt = 0;
             },
 
             getMessageRef() {
