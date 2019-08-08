@@ -11,9 +11,16 @@
 npm install
 ```
 
-## Show your support
+## Setting config for firebase .env
+
+```jshelllanguage
+VUE_APP_FB_API_KEY=
+VUE_APP_FB_AUTH_DOMAIN=
+VUE_APP_FB_DB_URL=
+VUE_APP_FB_PROJECT_ID=
+VUE_APP_FB_STORAGE_BUCKET=
+VUE_APP_FB_MSG_SENDER_ID=
+VUE_APP_FB_APP_ID=
+```
 
 Give a ⭐️ if this project helped you!
-
-***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

@@ -11,13 +11,13 @@ import vuetify from './plugins/vuetify';
 import './plugins';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyB4PRIxuchbrRPGITh9HonN_A0D7yhwwYM",
-    authDomain: "slack-d472b.firebaseapp.com",
-    databaseURL: "https://slack-d472b.firebaseio.com",
-    projectId: "slack-d472b",
-    storageBucket: "slack-d472b.appspot.com",
-    messagingSenderId: "1063887636953",
-    appId: "1:1063887636953:web:3aa54c61b9d83451"
+    apiKey: process.env.VUE_APP_FB_API_KEY,
+    authDomain: process.env.VUE_APP_FB_AUTH_DOMAIN,
+    databaseURL: process.env.VUE_APP_FB_DB_URL,
+    projectId: process.env.VUE_APP_FB_PROJECT_ID,
+    storageBucket: process.env.VUE_APP_FB_STORAGE_BUCKET,
+    messagingSenderId: process.env.VUE_APP_FB_MSG_SENDER_ID,
+    appId: process.env.VUE_APP_FB_APP_ID
 };
 firebase.initializeApp(firebaseConfig);
 
