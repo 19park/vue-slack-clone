@@ -87,7 +87,6 @@
     import moment from 'moment';
     import {mapGetters} from 'vuex';
 
-    import scrollTo from '@/plugins/scrollToBottom';
     import MessageForm from '@/components/messages/MessageForm';
     import vueScroll from 'vuescroll';
 
