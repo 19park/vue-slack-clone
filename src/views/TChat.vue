@@ -3,7 +3,6 @@
         <v-navigation-drawer
             v-model="drawer"
             app
-            clipped
         >
             <v-list>
                 <v-list-item class="pr-0">
@@ -81,7 +80,6 @@
 
         <v-app-bar
             app
-            clipped-left
             color="blue"
             dense
         >

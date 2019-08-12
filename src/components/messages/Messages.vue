@@ -8,67 +8,72 @@
             <v-flex ref="messageWrap"
                     class="message__wrap overflow-y-auto"
             >
-                <v-slide-y-transition
-                    three-line
-                    class="py-0"
-                    group
-                    tag="div"
+                <vue-scroll ref="vs"
+                            :opt="opt"
                 >
-                    <template v-for="(message, index) in messages">
-                        <v-subheader
-                            v-if="message.header"
-                            :key="message.header"
-                            v-text="message.header"
-                        ></v-subheader>
+                    <v-slide-y-transition
+                        three-line
+                        class="py-0"
+                        group
+                        tag="div"
+                    >
+                        <template v-for="(message, index) in messages">
+                            <v-subheader
+                                v-if="message.header"
+                                :key="message.header"
+                                v-text="message.header"
+                            ></v-subheader>
 
-                        <v-divider
-                            v-if="index > 0"
-                            :key="index"
-                            :inset="message.inset"
-                        ></v-divider>
+                            <v-divider
+                                v-if="index > 0"
+                                :key="index"
+                                :inset="message.inset"
+                            ></v-divider>
 
-                        <v-list-item
-                            :key="message.id"
-                            :class="{'comment__self': selfMessage(message.user)}"
-                        >
-                            <v-list-item-avatar class="align-self-start">
-                                <v-img :src="message.user.avatar"></v-img>
-                            </v-list-item-avatar>
+                            <v-list-item
+                                :id="message.id"
+                                :key="message.id"
+                                :class="{'comment__self': selfMessage(message.user)}"
+                            >
+                                <v-list-item-avatar class="align-self-start">
+                                    <v-img :src="message.user.avatar"></v-img>
+                                </v-list-item-avatar>
 
-                            <v-list-item-content v-if="!isFile(message)">
-                                <v-list-item-title class="d-flex justify-space-between mb-2">
-                                    <strong>{{message.user.name}}</strong>
-                                    <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
-                                </v-list-item-title>
-                                <v-list-item-subtitle v-html="message.content"></v-list-item-subtitle>
-                            </v-list-item-content>
-                            <v-list-item-content v-else>
-                                <v-list-item-title class="d-flex justify-space-between mb-2">
-                                    <strong>{{message.user.name}}</strong>
-                                    <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
-                                </v-list-item-title>
+                                <v-list-item-content v-if="!isFile(message)">
+                                    <v-list-item-title class="d-flex justify-space-between mb-2">
+                                        <strong>{{message.user.name}}</strong>
+                                        <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
+                                    </v-list-item-title>
+                                    <v-list-item-subtitle v-html="message.content"></v-list-item-subtitle>
+                                </v-list-item-content>
+                                <v-list-item-content v-else>
+                                    <v-list-item-title class="d-flex justify-space-between mb-2">
+                                        <strong>{{message.user.name}}</strong>
+                                        <span class="grey--text message__fromNow">{{message.timestamp | fromNow}}</span>
+                                    </v-list-item-title>
 
-                                <v-img :src="message.image"
-                                       :lazy-src="message.image"
-                                       max-width="600"
-                                       style="flex: 0 1 auto;"
-                                       contain>
-                                    <template v-slot:placeholder>
-                                        <v-layout
-                                            fill-height
-                                            align-center
-                                            justify-center
-                                            ma-0
-                                        >
-                                            <v-progress-circular indeterminate
-                                                                 color="grey lighten-5"></v-progress-circular>
-                                        </v-layout>
-                                    </template>
-                                </v-img>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </template>
-                </v-slide-y-transition>
+                                    <v-img :src="message.image"
+                                           :lazy-src="message.image"
+                                           max-width="600"
+                                           style="flex: 0 1 auto;"
+                                           contain>
+                                        <template v-slot:placeholder>
+                                            <v-layout
+                                                fill-height
+                                                align-center
+                                                justify-center
+                                                ma-0
+                                            >
+                                                <v-progress-circular indeterminate
+                                                                     color="grey lighten-5"></v-progress-circular>
+                                            </v-layout>
+                                        </template>
+                                    </v-img>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </template>
+                    </v-slide-y-transition>
+                </vue-scroll>
             </v-flex>
 
             <v-flex style="flex-grow: 0;">
@@ -84,6 +89,7 @@
 
     import scrollTo from '@/plugins/scrollToBottom';
     import MessageForm from '@/components/messages/MessageForm';
+    import vueScroll from 'vuescroll';
 
     export default {
         name: 'messages',
@@ -104,13 +110,25 @@
             channel: null,
             initConfig: {
                 load: false
+            },
+            opt: {
+                rail: {
+                    background: '#1dbdb7',
+                    opacity: 0,
+                    size: '6px',
+                    specifyBorderRadius: false,
+                    gutterOfEnds: null,
+                    gutterOfSide: '2px',
+                    keepShow: false
+                }
             }
         }),
         computed: {
             ...mapGetters(['currentChannel', 'currentUser', 'isPrivate'])
         },
         components: {
-            MessageForm
+            MessageForm,
+            vueScroll
         },
         watch: {
             currentChannel: {
@@ -172,13 +190,25 @@
             },
 
             moveToScroll(isFile) {
-                scrollTo(this.$refs.messageWrap, 0);
+                // scrollTo(this.$refs.messageWrap, 0);
+
                 if (isFile) {
                     this.$common.debounce(() => {
                         setTimeout(() => {
-                            scrollTo(this.$refs.messageWrap, 0);
+                            // scrollTo(this.$refs.messageWrap, 0);
+                            this.$refs['vs'].scrollTo(
+                                { y: this.$refs['vs'].getCurrentviewDom()[0].scrollHeight },
+                                300,
+                                'easeInQuad'
+                            );
                         }, 1000);
                     }, 100);
+                } else {
+                    this.$refs['vs'].scrollTo(
+                        { y: this.$refs['vs'].getCurrentviewDom()[0].scrollHeight },
+                        300,
+                        'easeInQuad'
+                    );
                 }
             },
 
