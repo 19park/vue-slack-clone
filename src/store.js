@@ -8,7 +8,21 @@ export default new Vuex.Store({
         currentUser: null,
         currentChannel: null,
 
-        isPrivate: false
+        isPrivate: false,
+        scrollOpt: {
+            bar: {
+                showDelay: 500,
+                onlyShowBarOnScroll: false,
+                keepShow: true,
+                background: '#1dbdb7',
+                opacity: 1,
+                hoverStyle: false,
+                specifyBorderRadius: false,
+                minSize: 0,
+                size: '6px',
+                disable: false
+            }
+        }
     },
     getters: {
         currentUser: state => state.currentUser,

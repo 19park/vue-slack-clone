@@ -9,7 +9,7 @@
                     class="message__wrap overflow-y-auto"
             >
                 <vue-scroll ref="vs"
-                            :opt="opt"
+                            :opt="$store.state.scrollOpt"
                 >
                     <v-slide-y-transition
                         three-line
@@ -109,17 +109,6 @@
             channel: null,
             initConfig: {
                 load: false
-            },
-            opt: {
-                rail: {
-                    background: '#1dbdb7',
-                    opacity: 0,
-                    size: '6px',
-                    specifyBorderRadius: false,
-                    gutterOfEnds: null,
-                    gutterOfSide: '2px',
-                    keepShow: false
-                }
             }
         }),
         computed: {

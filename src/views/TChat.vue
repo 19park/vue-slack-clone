@@ -4,78 +4,82 @@
             v-model="drawer"
             app
         >
-            <v-list>
-                <v-list-item class="pr-0">
-                    <v-list-item-avatar class="my-0">
-                        <img :src="currentUser ? currentUser.photoURL : '/empty_user.png'" alt="Profile">
-                    </v-list-item-avatar>
+            <vue-scroll ref="vs"
+                        :opt="$store.state.scrollOpt"
+            >
+                <v-list>
+                    <v-list-item class="pr-0">
+                        <v-list-item-avatar class="my-0">
+                            <img :src="currentUser ? currentUser.photoURL : '/empty_user.png'" alt="Profile">
+                        </v-list-item-avatar>
 
-                    <v-list-item-content>
-                        <v-list-item-title>{{currentUser.displayName}}</v-list-item-title>
-                        <v-list-item-subtitle :title="currentUser.email">{{currentUser.email}}</v-list-item-subtitle>
-                    </v-list-item-content>
+                        <v-list-item-content>
+                            <v-list-item-title>{{currentUser.displayName}}</v-list-item-title>
+                            <v-list-item-subtitle :title="currentUser.email">{{currentUser.email}}</v-list-item-subtitle>
+                        </v-list-item-content>
 
-                    <v-list-item-action
-                        class="my-0"
-                        @click="doLogout"
-                    >
-                        <v-tooltip right>
-                            <template v-slot:activator="{ on }">
-                                <v-btn icon ripple v-on="on">
-                                    <v-icon color="darken-1">logout</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>로그아웃</span>
-                        </v-tooltip>
-                    </v-list-item-action>
-                </v-list-item>
-                <v-list-item>
-                    <v-list-item-title class="cyan--text text--lighten-3">
-                        <v-btn
-                            block
-                            @click="doAddChannals"
+                        <v-list-item-action
+                            class="my-0"
+                            @click="doLogout"
                         >
-                            <v-icon left>add</v-icon>
-                            채널 생성하기
-                        </v-btn>
-                    </v-list-item-title>
-                </v-list-item>
-            </v-list>
-            <v-list dense>
-                <v-list-item
-                    v-for="channel in channels"
-                    :key="channel.id"
-                    @click="changeChannel(channel)"
-                >
-                    <v-list-item-action>
-                        <v-icon :color="isChannelActive(channel) ? 'orange darken-1':''">lens</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title
-                            class="d-flex justify-space-between align-center"
-                            :class="{'orange--text text--darken-1': isChannelActive(channel)}"
-                        >
-                            <div>{{ channel.name }}</div>
-                            <div v-if="getNotification(channel) > 0 && channel.id !== currentChannel.id">
-                                <v-chip :ripple="false"
-                                        color="red"
-                                >
-                                    {{ getNotification(channel) }}
-                                </v-chip>
-                            </div>
+                            <v-tooltip right>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn icon ripple v-on="on">
+                                        <v-icon color="darken-1">logout</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>로그아웃</span>
+                            </v-tooltip>
+                        </v-list-item-action>
+                    </v-list-item>
+                    <v-list-item>
+                        <v-list-item-title class="cyan--text text--lighten-3">
+                            <v-btn
+                                block
+                                @click="doAddChannals"
+                            >
+                                <v-icon left>add</v-icon>
+                                채널 생성하기
+                            </v-btn>
                         </v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                    </v-list-item>
+                </v-list>
+                <v-list dense>
+                    <v-list-item
+                        v-for="channel in channels"
+                        :key="channel.id"
+                        @click="changeChannel(channel)"
+                    >
+                        <v-list-item-action>
+                            <v-icon :color="isChannelActive(channel) ? 'orange darken-1':''">lens</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title
+                                class="d-flex justify-space-between align-center"
+                                :class="{'orange--text text--darken-1': isChannelActive(channel)}"
+                            >
+                                <div>{{ channel.name }}</div>
+                                <div v-if="getNotification(channel) > 0 && channel.id !== currentChannel.id">
+                                    <v-chip :ripple="false"
+                                            color="red"
+                                    >
+                                        {{ getNotification(channel) }}
+                                    </v-chip>
+                                </div>
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
 
-                <v-subheader
-                    class="mt-4 pl-4 grey--text"
-                    style="font-size: 1rem;"
-                >사용자
-                </v-subheader>
+                    <v-subheader
+                        class="mt-4 pl-4 grey--text"
+                        style="font-size: 1rem;"
+                    >사용자
+                    </v-subheader>
 
-                <Users ref="userContainer"/>
+                    <Users ref="userContainer"/>
 
-            </v-list>
+                </v-list>
+            </vue-scroll>
         </v-navigation-drawer>
 
         <v-app-bar
@@ -122,6 +126,7 @@
 
     import Users from '@/components/sidebar/Users';
     import ModalChannels from '@/components/sidebar/Channels';
+    import vueScroll from 'vuescroll';
 
     export default {
         name: 'tchat',
@@ -139,7 +144,7 @@
         computed: {
             ...mapGetters(['currentUser', 'currentChannel', 'isPrivate'])
         },
-        components: {Users, ModalChannels},
+        components: {Users, ModalChannels, vueScroll},
         watch: {
             isPrivate() {
                 if (this.isPrivate) {
@@ -247,3 +252,9 @@
         }
     };
 </script>
+
+<style>
+    .__view {
+        max-width: 100%;
+    }
+</style>
