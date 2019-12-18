@@ -253,8 +253,10 @@
     };
 </script>
 
-<style>
-    .__view {
-        max-width: 100%;
+<style lang="scss">
+    .v-navigation-drawer {
+        .__view {
+            max-width: 100%;
+        }
     }
 </style>

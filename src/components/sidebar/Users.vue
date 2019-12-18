@@ -145,7 +145,7 @@
             },
 
             isOnline(user) {
-                return user.status == 'online';
+                return user.status === 'online';
             },
 
             changeChannel(user) {

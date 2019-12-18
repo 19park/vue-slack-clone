@@ -8,6 +8,11 @@ import store from './store';
 import firebase from 'firebase/app';
 import 'firebase/messaging';
 
+import Notifications from 'vue-notification';
+import velocity      from 'velocity-animate';
+
+Vue.use(Notifications, { velocity });
+
 import vuetify from './plugins/vuetify';
 import './plugins';
 
@@ -29,59 +34,69 @@ const messaging = firebase.messaging();
 const FIREBASE_PUSH_KEY = "BLae72mufQjF732CFzVq8_z2py31FCb7g7KtR0j-InobofyP4qC2VbSiX5vH4wKr4DYCeFP1R9XHSkpIm9DAa1I";
 messaging.usePublicVapidKey(FIREBASE_PUSH_KEY);
 
-Notification.requestPermission().then((permission) => {
-    if (permission === 'granted') {
-        getMyToken();
-    } else {
-        // console.log('Unable to get permission to notify.');
-        setTokenSentToServer(false);
+function lsTest() {
+    const test = 'test';
+    try {
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+    } catch (e) {
+        return false;
     }
-});
+}
 
-// Get Instance ID token. Initially this makes a network call, once retrieved
-// subsequent calls to getToken will return from cache.
+if (lsTest()) {
+    Notification.requestPermission().then((permission) => {
+        if (permission === 'granted') {
+            getMyToken();
+        } else {
+            // console.log('Unable to get permission to notify.');
+            setTokenSentToServer(false);
+        }
+    });
+
+    messaging.onTokenRefresh(() => {
+        messaging.getToken().then(() => {
+            setTokenSentToServer(false);
+        }).catch(() => {
+            // console.log('Unable to retrieve refreshed token ', err);
+        });
+    });
+
+    messaging.onMessage((payload) => {
+        // console.log('onMessage: ', payload);
+        const title = payload.notification.title;
+        const options = {
+            body: payload.notification.body,
+            icon: payload.notification.icon
+        };
+        const notification = new Notification(title, options);
+        notification.onclick = function (event) {
+            event.preventDefault();
+            window.focus();
+        }
+    });
+}
+
 function getMyToken() {
     messaging.getToken().then((currentToken) => {
         if (currentToken) {
             saveToken(currentToken);
             setTokenSentToServer(true);
         } else {
-            // console.log('No Instance ID token available. Request permission to generate one.');
             setTokenSentToServer(false);
         }
     }).catch(() => {
-        // console.log('An error occurred while retrieving token. ', err);
         setTokenSentToServer(false);
     });
 }
-
-// Callback fired if Instance ID token is updated.
-messaging.onTokenRefresh(() => {
-    messaging.getToken().then(() => {
-        // refreshedToken
-        setTokenSentToServer(false);
-    }).catch(() => {
-        // console.log('Unable to retrieve refreshed token ', err);
-    });
-});
-
 function setTokenSentToServer(sent) {
-    window.localStorage.setItem('sentTokenToServer', sent ? 1 : 0);
+    window.localStorage.setItem('sentTokenToServer', (sent ? 1 : 0).toString());
 }
 
-function saveToken(token){
+function saveToken(token) {
     window.localStorage.setItem('myToken', token);
 }
-
-messaging.onMessage((payload) => {
-    // console.log('onMessage: ', payload);
-    const title = payload.notification.title;
-    const options = {
-        body: payload.notification.body,
-        icon: payload.notification.icon
-    };
-    new Notification(title,options);
-});
 
 const unsuscribe = firebase.auth().onAuthStateChanged(user => {
     store.dispatch('setUser', user);

@@ -4,8 +4,8 @@ export default {
             this.$notify({
                 group: 'active',
                 type: 'success',
-                title: '접속 알림',
-                text
+                title: '알림',
+                text: text
             });
         },
 
@@ -20,7 +20,7 @@ export default {
                     click_action: `${location.protocol}//${location.host}`,
                 },
                 to: token
-            }
+            };
             fetch('https://fcm.googleapis.com/fcm/send', {
                 method: 'POST',
                 body: JSON.stringify(message),
@@ -46,12 +46,14 @@ export default {
                     lastTotal = notifCount[idx].total;
 
                     if (snap.numChildren() - lastTotal > 0) {
+                        if (notifCount[idx].notif !== snap.numChildren() - lastTotal) {
+                            this.doNotify(`메시지가 도착했습니다. [[${snap.numChildren() - lastTotal}]]`);
+                            this.doPushSubmit('메시지가 도착했습니다.');
+                        }
                         notifCount[idx].notif = snap.numChildren() - lastTotal;
                     }
                 }
                 notifCount[idx].lastKnownTotal = snap.numChildren();
-                this.doNotify(`메시지가 도착했습니다. [${snap.numChildren()}]`);
-                this.doPushSubmit('메시지가 도착했습니다.');
             } else {
                 notifCount.push({
                     id: channelId,
