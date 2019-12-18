@@ -52,9 +52,8 @@
                 presenceRef: vm.$firebase.database().ref('presence'),
                 privateMessagesRef: vm.$firebase.database().ref('privateMessages'),
 
-                notifCount: [],
                 channel: null,
-
+                notifCount: [],
                 initConfig: {
                     load: false
                 }
@@ -201,15 +200,10 @@
                 }
             },
 
-
             doNotifiActive(userId) {
                 const getUser = this.users.find(user => user.uid === userId);
-                this.$notify({
-                    group: 'active',
-                    type: 'success',
-                    title: '접속 알림',
-                    text: `${getUser.name}님이 접속했습니다.`
-                });
+                this.doNotify(`${getUser.name}님이 접속했습니다.`);
+                this.doPushSubmit(`${getUser.name}님이 접속했습니다.`);
             },
 
             detachListeners() {
