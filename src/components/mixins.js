@@ -26,7 +26,7 @@ export default {
                 body: JSON.stringify(message),
                 headers: new Headers({
                     'Content-type': 'application/json',
-                    'Authorization': `key=${process.env.VUE_APP_FB_API_KEY}`
+                    'Authorization': `key=${process.env.VUE_APP_FB_FCM_AUTH_KEY}`
                 })
             }).then(response => {
                 if (response.status < 200 || response.status >= 400) {

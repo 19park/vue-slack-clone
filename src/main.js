@@ -27,7 +27,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-if ('serviceWorker' in navigator) {
+try {
     const messaging = firebase.messaging();
     const FIREBASE_PUSH_KEY = "BLae72mufQjF732CFzVq8_z2py31FCb7g7KtR0j-InobofyP4qC2VbSiX5vH4wKr4DYCeFP1R9XHSkpIm9DAa1I";
     messaging.usePublicVapidKey(FIREBASE_PUSH_KEY);
@@ -60,7 +60,7 @@ if ('serviceWorker' in navigator) {
             const notification = new Notification(title, options);
             notification.onclick = function (event) {
                 event.preventDefault();
-                window.focus();
+                alert(payload.notification.body);
             }
         });
     }
@@ -77,6 +77,9 @@ if ('serviceWorker' in navigator) {
             setTokenSentToServer(false);
         });
     }
+} catch(e) {
+    /* eslint-disable */
+    console.debug(e);
 }
 
 function lsTest() {
