@@ -65,4 +65,4 @@ export default (element, duration) => {
     };
     // boostrap the animation process
     setTimeout(scroll_frame, 0);
-}
+};

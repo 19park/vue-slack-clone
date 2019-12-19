@@ -30,7 +30,7 @@ export default {
                 })
             }).then(response => {
                 if (response.status < 200 || response.status >= 400) {
-                    throw 'Error subscribing to topic: ' + response.status + ' - ' + response.text();
+                    // console.log('Error subscribing to topic: ' + response.status + ' - ' + response.text());
                 }
             }).catch((err) => {
                 if (err) this.$alert.showCommonAlert(JSON.stringify(err));

@@ -142,7 +142,10 @@
                         }).then(async () => {
                             await this.saveUserToUsersRef(user).then(() => {
                                 this.$store.dispatch('setUser', user);
-                                this.$snack['success']({
+                                this.$notify({
+                                    group: 'active',
+                                    type: 'warn',
+                                    title: '알림',
                                     text: '가입 완료되었습니다. 로그인 해주세요.'
                                 });
                                 this.$router.replace('/login');

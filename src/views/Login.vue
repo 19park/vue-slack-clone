@@ -149,7 +149,10 @@
 
             doLoginComplete(user) {
                 this.$store.dispatch('setUser', user);
-                this.$snack['success']({
+                this.$notify({
+                    group: 'active',
+                    type: 'warn',
+                    title: '알림',
                     text: `${user.displayName}님 안녕하세요.`
                 });
                 this.$router.replace('/');
